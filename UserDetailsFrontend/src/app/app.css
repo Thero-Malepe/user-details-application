@@ -1,0 +1,44 @@
+/* App Container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f5f7fa;
+  }
+  
+  .clickable {
+    cursor: pointer;
+  }
+
+  .app-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .nav-link-primary {
+    background: #3498db;
+    color: white;
+    font-weight: 600;
+  }
+  
+  .nav-link-primary:hover {
+    background: #2980b9;
+  }
+  
+  .nav-link-primary.active {
+    background: #2980b9;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
