@@ -12,12 +12,6 @@ export class UserDetailsService {
 
   public apiUrl = environment.apiBaseUrl;
 
-  private httpOptions = {
-    headers: new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    }),
-  };
-
   constructor(private http: HttpClient) { }
 
   getDetailsByEmail(email: string): Observable<UserDetails> {
@@ -25,10 +19,8 @@ export class UserDetailsService {
     return this.http.get<UserDetails>(
       `${this.apiUrl}/UserDetails`,
       {
-        params: {email: email},
-        ...this.httpOptions
+        params: {email: email}
       }
-      
     );
   }
 }
