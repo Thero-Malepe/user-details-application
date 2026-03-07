@@ -1,4 +1,4 @@
 export class RefreshTokenDto {
-    UserId: string = '';
+    accessToken: string = '';
     refreshToken: string = '';
 }
