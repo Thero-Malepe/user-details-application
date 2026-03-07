@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserDetailsService } from '../../core/services/userDetailsService/user-details.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../../core/services/authService/auth.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class Home implements OnInit {
   details: any;
 
   constructor(
+    private authService: AuthService,
     private fb: FormBuilder, 
     private modalService: NgbModal,
     private router: Router,
@@ -58,9 +60,8 @@ export class Home implements OnInit {
   }
 
   logout()
-  {    
-    localStorage.clear();
-    this.router.navigate(['/login']);
+  {
+    this.authService.logout();
   }
 
   openModal(content: any) {

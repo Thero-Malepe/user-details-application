@@ -7,6 +7,7 @@ import { User } from '../../models/user.model';
 import { LoginDto } from '../../models/loginDto.model';
 import { TokenResponseDto } from '../../models/tokenResponseDto.model';
 import { RefreshTokenDto } from '../../models/refreshTokenDto.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
 
   public apiUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   register(dto: UserDto): Observable<User> {
     return this.http.post<User>(
@@ -34,15 +35,16 @@ export class AuthService {
       `${this.apiUrl}/Auth/refresh-token`, dto
     );
   }
+  
+  logout()
+  {    
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
 
   isLoggedIn()
   {
-    if(!!localStorage.getItem('token'))
-    {
-      return true;
-    }
-
-    return false;
+    return !!localStorage.getItem('token');
   }
 }
 export { User };
