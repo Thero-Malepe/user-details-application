@@ -7,5 +7,7 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('UserDetailsFrontend');
+  title = 'User Details Application';
+  currentYear = new Date().getFullYear();
+  angularVersion = '20.3.17';
 }
