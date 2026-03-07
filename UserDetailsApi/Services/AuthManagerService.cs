@@ -66,16 +66,16 @@ namespace UserDetailsApi.Services
 
         public async Task<TokenResponseDto?> RefreshToken(RefreshTokenDto request)
         {
-            var user = await ValidateRefreshToken(request.UserId, request.RefreshToken);
+            var user = await ValidateRefreshToken(request.RefreshToken);
             if (user is null)
                 return null;
 
             return await CreateTokenResponse(user);
         }
 
-        private async Task<User?> ValidateRefreshToken(Guid userId, string refreshToken)
+        private async Task<User?> ValidateRefreshToken(string refreshToken)
         {
-            var user = await context.Users.FindAsync(userId);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken.Trim());
             if(user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow) 
             {
                 return null;
