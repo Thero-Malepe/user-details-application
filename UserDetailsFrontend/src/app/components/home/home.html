@@ -1,0 +1,58 @@
+<div class="card-body">
+        <form [formGroup]="form">
+            <div>
+              <label for="email">Email</label>
+              <input
+                class="form-control"
+                id="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="name@example.com"
+                required
+              >
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    id="firstName"
+                    class="form-control"
+                    formControlName="firstName"
+                    required
+                />
+            </div>
+            <div>
+                <label for="lastName">Last Name</label>
+                <input
+                    class="form-control"
+                    id="lastName"
+                    class="form-control"
+                    formControlName="lastName"
+                    required
+                >
+            </div>
+            <br>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" (click)="openModal(content)">
+                Log out
+            </button>
+
+            <!-- Modal -->
+            <ng-template #content let-modal>
+                <div class="modal-header">
+                    <h5 class="modal-title">Logging Out</h5>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="modal.close()">Close</button>
+                    <button type="button" class="btn btn-primary"  (click)="logout()">Yes</button>
+                </div>
+            </ng-template>
+        </form>          
+    </div>
