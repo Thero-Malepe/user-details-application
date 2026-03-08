@@ -33,12 +33,12 @@
 ## 🔍 Available Endpoints
 
 AuthController
-    /api/auth/register
-    /api/auth/login
-    /api/auth/refresh-token
+- /api/auth/register
+- /api/auth/login
+- /api/auth/refresh-token
 
 UserDetailsController (Protected)
-    /api/userdetails?email=
+- /api/userdetails?email=
 
 ## 🔐 Authentication Flow
 
