@@ -34,9 +34,8 @@
              <div *ngIf="form.get('password')?.invalid" class="text-danger">
                     Password length must be between 8 and 15 characters
             </div>
-            <div>
-                <p>Don't have an account?</p>
-                <button type="button" class="btn btn-link" (click)="toggle()">Register</button>
+            <div class="d-flex">
+                <button type="button" class="btn btn-link" (click)="toggle()">Register here?</button>
             </div>
 
             <div class="card-footer text-right">

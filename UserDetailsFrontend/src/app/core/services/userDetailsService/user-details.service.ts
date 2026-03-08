@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../../models/user.model';
@@ -15,7 +15,6 @@ export class UserDetailsService {
   constructor(private http: HttpClient) { }
 
   getDetailsByEmail(email: string): Observable<UserDetails> {
-    console.log('request sent')
     return this.http.get<UserDetails>(
       `${this.apiUrl}/UserDetails`,
       {

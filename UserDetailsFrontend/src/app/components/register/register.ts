@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/authService/auth.service';
-import { LoginDto } from '../../core/models/loginDto.model';
 import { UserDto } from '../../core/models/userDto.model';
 
 @Component({
@@ -26,8 +25,8 @@ export class Register implements OnInit{
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]],
-      firstName: ['', [Validators.required, Validators.email]],
-      lastName: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
     }); 
   }
 
