@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 using UserDetailsApi.Data;
 using UserDetailsApi.Interfaces;
@@ -24,6 +25,8 @@ namespace UserDetailsApi
             builder.Services.AddDbContext<UserDetailsDbContext>(
                 options => options.UseNpgsql(builder.Configuration.GetConnectionString("UserDetailsDb")
             ));
+
+            builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
             //Adding Authentication that uses Bearer
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

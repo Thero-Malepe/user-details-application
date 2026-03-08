@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using UserDetailsApi.DTOs;
+﻿using UserDetailsApi.DTOs;
 using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Interfaces

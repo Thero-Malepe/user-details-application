@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
 using UserDetailsApi.DTOs;
 using UserDetailsApi.Interfaces;
 
@@ -17,7 +12,6 @@ namespace UserDetailsApi.Controllers
         public async Task<IActionResult> Register ([FromBody] UserDto request)
         {
             var user = await authManager.Register(request);
-
             if (user is null)
                 return BadRequest("User already exists");
 
