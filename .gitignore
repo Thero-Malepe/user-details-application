@@ -1,3 +1,6 @@
 /UserDetailsApi/.vs
 /UserDetailsApi/obj
 /UserDetailsApi/bin
+/UserDetailsApi.Tests/bin
+/UserDetailsApi.Tests/obj
+/UserDetailsApi/logs
