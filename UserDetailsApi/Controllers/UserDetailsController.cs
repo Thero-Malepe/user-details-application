@@ -14,7 +14,6 @@ namespace UserDetailsApi.Controllers
         public async Task<IActionResult> GetUserDetails([FromQuery] string email)
         {
             var user = await detailsService.GetUserDetails(email);
-
             if(user is null)
             {
                 return NotFound("User details not found");

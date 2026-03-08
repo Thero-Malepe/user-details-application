@@ -2,7 +2,6 @@
 using UserDetailsApi.Data;
 using UserDetailsApi.DTOs;
 using UserDetailsApi.Interfaces;
-using UserDetailsApi.Migrations;
 
 namespace UserDetailsApi.Services
 {
@@ -24,11 +23,6 @@ namespace UserDetailsApi.Services
             };
             
             return userDetailsDto;
-        }
-
-        public Task<TokenResponseDto?> UpdateUserDetails(LoginDto apiUserloginDto)
-        {
-            throw new NotImplementedException();
         }
     }
 }

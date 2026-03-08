@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,12 +12,15 @@ using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Services
 {
-    public class AuthManagerService(UserDetailsDbContext context, IConfiguration _configuration) : IAuthManagerService
+    public class AuthManagerService(UserDetailsDbContext context, IConfiguration configuration, ILogger<AuthManagerService> logger) : IAuthManagerService
     {
         public async Task<User?> Register (UserDto request)
         {
+            logger.LogInformation("Registering user with email: {}", request.Email);
+
             if (await context.Users.AnyAsync(x => x.Email.ToLower().Trim() == request.Email.ToLower().Trim()))
             {
+                logger.LogError("User with email: {email} already exists", request.Email);
                 return null;
             }
 
@@ -33,25 +35,31 @@ namespace UserDetailsApi.Services
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
 
+            logger.LogInformation("User email: {email} registered successfully", request.Email);
             return user;
         }
 
         public async Task<TokenResponseDto?> Login(LoginDto request)
         {
+            logger.LogInformation("Logging in user");
+
             var user = await context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Trim() == request.Email.ToLower().Trim());
             if (user is null)
             {
+                logger.LogError("User with email: {email} not found", request.Email);
                 return null;
             }
 
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash.Trim(), request.Password.Trim())
                             == PasswordVerificationResult.Failed)
             {
+                logger.LogError("Incorrect Password");
                 return null;
             }
 
             TokenResponseDto tokens = await CreateTokenResponse(user);
 
+            logger.LogInformation("User with email: {email} logged in Successfully", request.Email);
             return tokens;
         }
 
@@ -66,10 +74,16 @@ namespace UserDetailsApi.Services
 
         public async Task<TokenResponseDto?> RefreshToken(RefreshTokenDto request)
         {
+            logger.LogInformation("Refreshing user token {refreshToken}", request.RefreshToken);
+
             var user = await ValidateRefreshToken(request.RefreshToken);
             if (user is null)
+            {
+                logger.LogError("Token: {refreshToken} invalid", request.RefreshToken);
                 return null;
+            }
 
+            logger.LogInformation("Token refreshed successfully");
             return await CreateTokenResponse(user);
         }
 
@@ -104,34 +118,28 @@ namespace UserDetailsApi.Services
             };
 
             //Sign-in key
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Token"]!));
-
-            //Alternate syntax
-            //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("AppSettings:JwtSettings")!));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Token"]!));
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"],
+                issuer: configuration["JwtSettings:Issuer"],
+                audience: configuration["JwtSettings:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtSettings:DurationInMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(configuration["JwtSettings:DurationInMinutes"])),
                 signingCredentials: credentials
-                );
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
 
-        private string GenerateRefreshToken()
+        private static string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var randNum = RandomNumberGenerator.Create();
             randNum.GetBytes(randomNumber);
 
             return Convert.ToBase64String(randomNumber);
-        }
-
-        
+        }        
     }
 }
