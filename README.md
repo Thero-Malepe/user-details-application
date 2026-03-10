@@ -1,8 +1,42 @@
 # 🧱 User Details App
 
 ---
+## ⚙️ Setup Instructions (with Docker)
 
-## ⚙️ Setup Instructions
+### Prerequisites
+
+- Git
+- Docker & Docker Compose
+- .NET 8 SDK (only required for local development)
+- Node.js (v22+) & Angular CLI v20+ (only required for local development)
+
+Each service runs in its own container:
+
+### 🏗️ Architecture Overview
+
+- `ui` → Angular app served via Nginx  
+- `api` → ASP.NET Core Web API  
+- `postgres` → PostgreSQL database  
+
+### 🐳 Running the Application with Docker
+
+From the project root:
+- bash: `docker compose up --build`
+
+## 🚀 Features
+
+- User registration and login
+- JWT‑based authentication
+- Secure password hashing
+- PostgreSQL database with EF Core migrations
+- Automatic migrations on startup
+- Angular UI served via Nginx
+- Fully containerized with Docker Compose
+- CORS enabled for local development
+
+---
+
+## ⚙️ Setup Instructions (Locally)
 
 ### Prerequisites
 - Node.js (v22+)
