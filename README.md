@@ -33,6 +33,7 @@ From the project root:
 - Angular UI served via Nginx
 - Fully containerized with Docker Compose
 - CORS enabled for local development
+- Global error handling
 
 ---
 
@@ -45,7 +46,7 @@ From the project root:
 - PG Admin (PostgreSQL)
 - Git
 
-## ⚙️ Instructions to run project
+### Instructions to run project
 
 ### .NET Backend
 - Go to https://dotnet.microsoft.com/download and download SDK (v8.0+) if not intalled

@@ -7,6 +7,7 @@ using Serilog;
 using System.Text;
 using UserDetailsApi.Data;
 using UserDetailsApi.Interfaces;
+using UserDetailsApi.Middleware;
 using UserDetailsApi.Services;
 
 namespace UserDetailsApi
@@ -97,6 +98,9 @@ namespace UserDetailsApi
             });
 
             var app = builder.Build();
+
+            //Middleware
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // Apply migrations automatically for docker
             using (var scope = app.Services.CreateScope())
