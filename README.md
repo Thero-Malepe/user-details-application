@@ -6,7 +6,7 @@
 ### Prerequisites
 
 - Git
-- Docker & Docker Compose
+- Docker & Docker Compose (Docker Desktop)
 - .NET 8 SDK (only required for local development)
 - Node.js (v22+) & Angular CLI v20+ (only required for local development)
 
@@ -20,8 +20,19 @@ Each service runs in its own container:
 
 ### 🐳 Running the Application with Docker
 
+- Open Docker Desktop
+
 From the project root:
-- bash: `docker compose up --build`
+- In command prompt: `docker compose up --build`
+
+### 🐳 Running the Application build Script
+
+- Open Docker Desktop
+
+From anywhere:
+- Copy full path to `build.ps1` file
+- E.g. FullPath - C:\login-application\build.ps1
+- In command prompt: `powershell -ExecutionPolicy Bypass -File "FullPath"`
 
 ## 🚀 Features
 
