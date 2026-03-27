@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,7 +17,7 @@ namespace UserDetailsApi.Services
     {
         public async Task<User?> Register (UserDto request)
         {
-            logger.LogInformation("Registering user with email: {}", request.Email);
+            logger.LogInformation("Registering user with email: {email}", request.Email);
 
             if (await context.Users.AnyAsync(x => x.Email.ToLower().Trim() == request.Email.ToLower().Trim()))
             {
@@ -140,6 +141,76 @@ namespace UserDetailsApi.Services
             randNum.GetBytes(randomNumber);
 
             return Convert.ToBase64String(randomNumber);
-        }        
+        }
+        
+        public async Task<bool> PasswordResetEmail(string email)
+        {
+            logger.LogInformation("Resetting password for user with email: {email}", email);
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Trim() == email.ToLower().Trim());
+
+            if (user is null)
+            {
+                logger.LogError("User with email: {email} not found", email);
+                return false;
+            }
+
+
+            var token = GenerateRefreshToken();
+
+            var reset = new PasswordResetToken
+            {
+                UserId = user.Id,
+                Token = token,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(5),
+                Used = false
+            };
+
+            context.PasswordResetTokens.Add(reset);
+            await context.SaveChangesAsync();
+
+            var resetLink = $"http://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(token)}";
+
+            var message = new MailMessage
+            {
+                From = new MailAddress("no-reply@example.com"),
+                Subject = "RESET PASSWORD",
+                Body = $"<p>Hello {user.FirstName} {user.LastName},</p><br/><p>Click <a href='{resetLink}'> here <a/> to reset your password <br/><br/> Link is valid for 5 minutes. <br/><br/> Kind regards,<br/> Admin </p>",
+                IsBodyHtml = true
+            };
+
+            message.To.Add("theromalepe@gmail.com");
+
+            var smtp = new SmtpClient("localhost", 25)   // FakeSMTP or smtp4dev
+            {
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false
+            };
+            await smtp.SendMailAsync(message);
+
+            return true;
+        }
+
+        public async Task<bool> ResetPassword(ResetDto details)
+        {
+            logger.LogInformation("Resetting password for user with email: {email}", details.Email);
+            var reset = await context.PasswordResetTokens.FirstOrDefaultAsync(x => x.Token == details.Token && !x.Used);
+
+            if (reset == null || reset.ExpiresAt < DateTime.UtcNow)
+            {
+                logger.LogError("User with email: {email} not found or expired token", details.Email);
+                return false;
+            }
+
+            var user = await context.Users.FindAsync(reset.UserId);
+
+            var hashed = new PasswordHasher<User>().HashPassword(user, details.Password);
+            user.PasswordHash = hashed;
+            reset.Used = true;
+            await context.SaveChangesAsync();
+
+            logger.LogInformation("User email: {email} password changed successfully", details.Email);
+            return true;
+        }
     }
 }

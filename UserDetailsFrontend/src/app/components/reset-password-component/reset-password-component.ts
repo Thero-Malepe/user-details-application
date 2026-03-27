@@ -1,0 +1,71 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginDto } from '../../core/models/loginDto.model';
+import { AuthService } from '../../core/services/authService/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ResetDto } from '../../core/models/resetDto.model';
+
+@Component({
+  selector: 'app-reset-password-component',
+  standalone: false,
+  templateUrl: './reset-password-component.html',
+  styleUrl: './reset-password-component.css',
+})
+export class ResetPasswordComponent implements OnInit{
+
+  form!: FormGroup;
+  email!: string;
+  token!: string;
+  resetDto: ResetDto = new ResetDto();
+
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute, 
+    private router: Router
+  ) {  }
+
+  ngOnInit() {
+    this.email = this.route.snapshot.queryParamMap.get('email')!;
+    this.token = this.route.snapshot.queryParamMap.get('token')!;
+
+    this.form = this.fb.group({
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
+      email: ['', [Validators.required, Validators.email]]
+    }); 
+  }
+
+  toggle()
+  {
+    this.router.navigate(['/login']);
+  }
+
+  logout()
+  {
+    this.authService.logout();
+  }
+
+  reset()
+  {
+    if(!this.form.invalid)
+    {
+      this.resetDto.email = this.email;
+      this.resetDto.password = this.form.get('password')?.value;
+      this.resetDto.token = this.token;
+
+      this.authService.resetPassword(this.resetDto).subscribe({
+        next: (response) => { 
+          alert('Password successfully changed');
+          
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          alert('Something went wrong, please try again');
+        }
+      });
+      
+    }else{
+      alert('Form Invalid');
+    }    
+  }
+}

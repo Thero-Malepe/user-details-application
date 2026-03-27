@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Net.Mail;
 using UserDetailsApi.DTOs;
 using UserDetailsApi.Interfaces;
 
@@ -41,6 +45,28 @@ namespace UserDetailsApi.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpGet()]
+        [Route("send-reset-email")]
+        public async Task<IActionResult> SendResetEmail(string email)
+        {
+            var result = await authManager.PasswordResetEmail(email);
+            if(!result)
+                return NotFound();
+
+            return Ok();
+        }
+
+        [HttpPost()]
+        [Route("reset-password")]
+        public async Task<IActionResult> ResetPasswor([FromBody] ResetDto details)
+        {
+            var result = await authManager.ResetPassword(details);
+            if (!result)
+                return NotFound();
+
+            return Ok();
         }
     }
 }

@@ -14,9 +14,16 @@
                 required
               >
             </div>
-            <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-danger">
+            <!-- <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-danger">
                 Email is required
-            </div>
+            </div> -->
+
+            @if(form.get('email')?.touched && form.get('email')?.invalid)
+            {
+                <div class="text-danger">
+                     Email is required
+                </div>
+            }
 
             <div class="form-group">
               <label for="password">Password</label>

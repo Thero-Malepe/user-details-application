@@ -8,6 +8,7 @@ import { LoginDto } from '../../models/loginDto.model';
 import { TokenResponseDto } from '../../models/tokenResponseDto.model';
 import { RefreshTokenDto } from '../../models/refreshTokenDto.model';
 import { Router } from '@angular/router';
+import { ResetDto } from '../../models/resetDto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,18 @@ export class AuthService {
   login(dto: LoginDto): Observable<TokenResponseDto> {
     return this.http.post<TokenResponseDto>(
       `${this.apiUrl}/Auth/login`, dto
+    );
+  }
+
+  resetPassword(dto: ResetDto): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/Auth/reset-password`, dto
+    );
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/Auth/send-reset-email?email=${email}`
     );
   }
 

@@ -10,13 +10,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Register } from './components/register/register';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './core/services/interceptorService/Interceptor.service';
+import { ResetPasswordComponent } from './components/reset-password-component/reset-password-component';
+import { ForgotPassword } from './components/forgot-password/forgot-password';
 
 @NgModule({
   declarations: [
     App,
     Login,
     Home,
-    Register
+    Register,
+    ResetPasswordComponent,
+    ForgotPassword
   ],
   imports: [
     AppRoutingModule,

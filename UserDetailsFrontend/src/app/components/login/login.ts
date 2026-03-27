@@ -33,6 +33,11 @@ export class Login implements OnInit{
     this.router.navigate(['/register']);
   }
 
+  forgot()
+  {
+    this.router.navigate(['/forgot-password']);
+  }
+
   login()
   {
     if(!this.form.invalid)
