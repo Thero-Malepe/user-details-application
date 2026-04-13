@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Password1
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
@@ -19,7 +19,11 @@ services:
       - "5066:5066"
     environment:
       ASPNETCORE_URLS: http://+:5066
-      ConnectionStrings__UserDetailsDb: "Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=Password1"
+      ConnectionStrings__UserDetailsDb: ${DB_CONNECTION}
+      JwtSettings__Token: ${JWT_TOKEN}
+      SMTP__Username: ${SMTP_USERNAME}
+      SMTP__Password: ${SMTP_PASSWORD}
+
     depends_on:
       - postgres
 
