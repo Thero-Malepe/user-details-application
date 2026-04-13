@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserDetailsApi.Data;
-using UserDetailsApi.DTOs;
+using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
 
 namespace UserDetailsApi.Services

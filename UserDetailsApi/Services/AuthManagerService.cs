@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using UserDetailsApi.Data;
-using UserDetailsApi.DTOs;
+using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
 using UserDetailsApi.Models;
 
@@ -145,58 +145,89 @@ namespace UserDetailsApi.Services
         
         public async Task<bool> PasswordResetEmail(string email)
         {
-            logger.LogInformation("Resetting password for user with email: {email}", email);
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Trim() == email.ToLower().Trim());
 
-            if (user is null)
-            {
-                logger.LogError("User with email: {email} not found", email);
-                return false;
-            }
+            //logger.LogInformation("Resetting password for user with email: {email}", email);
+            //var user = await context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Trim() == email.ToLower().Trim());
 
+            //if (user is null)
+            //{
+            //    logger.LogError("User with email: {email} not found", email);
+            //    return false;
+            //}
 
-            var token = GenerateRefreshToken();
+            //var token = GenerateRefreshToken();
+            //var reset = new PasswordResetToken
+            //{
+            //    UserId = user.Id,
+            //    Token = token,
+            //    ExpiresAt = DateTime.UtcNow.AddMinutes(5),
+            //    Used = false
+            //};
 
-            var reset = new PasswordResetToken
-            {
-                UserId = user.Id,
-                Token = token,
-                ExpiresAt = DateTime.UtcNow.AddMinutes(5),
-                Used = false
-            };
+            //context.PasswordResetTokens.Add(reset);
+            //await context.SaveChangesAsync();
 
-            context.PasswordResetTokens.Add(reset);
-            await context.SaveChangesAsync();
+            //var resetLink = $"http://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(token)}";
 
-            var resetLink = $"http://localhost:4200/reset-password?email={email}&token={Uri.EscapeDataString(token)}";
+            //var message = new MailMessage
+            //{
+            //    From = new MailAddress("no-reply@example.com"),
+            //    Subject = "RESET PASSWORD",
+            //    Body = $"<p>Hello {user.FirstName} {user.LastName},</p><br/><p>Click <a href='{resetLink}'> here <a/> to reset your password <br/><br/> Link is valid for 5 minutes. <br/><br/> Kind regards,<br/> Admin </p>",
+            //    IsBodyHtml = true
+            //};
 
-            var message = new MailMessage
-            {
-                From = new MailAddress("no-reply@example.com"),
-                Subject = "RESET PASSWORD",
-                Body = $"<p>Hello {user.FirstName} {user.LastName},</p><br/><p>Click <a href='{resetLink}'> here <a/> to reset your password <br/><br/> Link is valid for 5 minutes. <br/><br/> Kind regards,<br/> Admin </p>",
-                IsBodyHtml = true
-            };
+            //message.To.Add(email);
 
-            message.To.Add("theromalepe@gmail.com");
+            //var smtp = new SmtpClient("localhost", 25)   // FakeSMTP or smtp4dev
+            //{
+            //    EnableSsl = false,
+            //    DeliveryMethod = SmtpDeliveryMethod.Network,
+            //    UseDefaultCredentials = false
+            //};
 
-            var smtp = new SmtpClient("localhost", 25)   // FakeSMTP or smtp4dev
-            {
-                EnableSsl = false,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false
-            };
-            await smtp.SendMailAsync(message);
-
+            //await smtp.SendMailAsync(message);
             return true;
         }
+
+        static void CleanJson(JToken token)
+        {
+            if (token.Type == JTokenType.Object)
+            {
+                var obj = (JObject)token;
+                var props = obj.Properties().Where(p => !isInvalid(p.Value)).ToList();
+                obj.RemoveAll();
+
+                foreach (var prop in props)
+                {
+                    CleanJson(prop.Value);
+                    obj.Add(prop.Name, prop.Value);
+                }
+            }
+            else if (token.Type == JTokenType.Array)
+            {
+                var array = (JArray)token;
+                for (int i = array.Count - 1; i >= 0; i--)
+                {
+                    if (isInvalid(array[i]))
+                    {
+                        array.RemoveAt(i);
+                    }
+                    else
+                    {
+                        CleanJson(array[i]);
+                    }
+                }
+            }
+        }
+
 
         public async Task<bool> ResetPassword(ResetDto details)
         {
             logger.LogInformation("Resetting password for user with email: {email}", details.Email);
-            var reset = await context.PasswordResetTokens.FirstOrDefaultAsync(x => x.Token == details.Token && !x.Used);
+            var reset = await context.PasswordResetTokens.FirstOrDefaultAsync(x => x.Token.Trim() == details.Token.Trim() && !x.Used);
 
-            if (reset == null || reset.ExpiresAt < DateTime.UtcNow)
+            if (reset is null || reset.ExpiresAt < DateTime.UtcNow)
             {
                 logger.LogError("User with email: {email} not found or expired token", details.Email);
                 return false;

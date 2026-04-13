@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserDetailsApi.DTOs
+namespace UserDetailsApi.DTOs.AuthDtos
 {
     public class UserDetailsDto
     {

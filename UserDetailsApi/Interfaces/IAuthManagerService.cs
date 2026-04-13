@@ -1,4 +1,4 @@
-﻿using UserDetailsApi.DTOs;
+﻿using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Interfaces
