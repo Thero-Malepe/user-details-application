@@ -6,6 +6,8 @@ import { AuthGuard } from './core/services/authGuardService/auth-guard.service';
 import { Register } from './components/register/register';
 import { ResetPasswordComponent } from './components/reset-password-component/reset-password-component';
 import { ForgotPassword } from './components/forgot-password/forgot-password';
+import { TaskList } from './components/task-list/task-list';
+import { TaskForm } from './components/task-form/task-form';
 
 const routes: Routes = [
   {
@@ -33,11 +35,29 @@ const routes: Routes = [
     component: ForgotPassword,
     title: 'Forgot Password'
   },
+  // {
+  //   path: 'home',
+  //   canActivate: [AuthGuard],
+  //   component: Home,
+  //   title: 'home'
+  // },
   {
     path: 'home',
     canActivate: [AuthGuard],
-    component: Home,
+    component: TaskList,
     title: 'home'
+  },
+  {
+    path: 'tasks/new',
+    canActivate: [AuthGuard],
+    component: TaskForm,
+    title: 'New Task'
+  },
+  {
+    path: 'tasks/:taskId',
+    canActivate: [AuthGuard],
+    component: TaskForm,
+    title: 'Edit Task'
   },
   {
     path: '**',

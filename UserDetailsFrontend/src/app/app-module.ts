@@ -12,6 +12,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './core/services/interceptorService/Interceptor.service';
 import { ResetPasswordComponent } from './components/reset-password-component/reset-password-component';
 import { ForgotPassword } from './components/forgot-password/forgot-password';
+import { TaskForm } from './components/task-form/task-form';
+import { TaskList } from './components/task-list/task-list';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ForgotPassword } from './components/forgot-password/forgot-password';
     Home,
     Register,
     ResetPasswordComponent,
-    ForgotPassword
+    ForgotPassword,
+    TaskForm,
+    TaskList
   ],
   imports: [
     AppRoutingModule,

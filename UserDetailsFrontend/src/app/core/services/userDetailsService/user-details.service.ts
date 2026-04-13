@@ -23,5 +23,5 @@ export class UserDetailsService {
     );
   }
 }
-export { User };
+export { User, UserDetails };
 

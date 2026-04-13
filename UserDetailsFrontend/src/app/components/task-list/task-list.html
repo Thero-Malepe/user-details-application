@@ -1,0 +1,98 @@
+<div class="container py-4">
+  <form class="d-flex flex-grow-1 " role="search">
+    <input class="form-control py-2 mx-5" type="search" placeholder="Search tasks by title or description..."
+    [value]="searchQuery"
+    (input)="onSearchChange($event)" aria-label="Search"/>
+    <div class="col-md-4">
+      <div class="input-group">
+        <label class="input-group-text bg-white" for="sortSelect">
+          <i class="bi bi-sort-down me-1"></i>
+          Sort
+        </label>
+        <select
+          class="form-select"
+          id="sortSelect"
+          [value]="sortOrder"
+          (change)="onSortChange($event)"
+        >
+          <option value="dueDate:asc">Due Date (Earliest First)</option>
+          <option value="dueDate:desc">Due Date (Latest First)</option>
+        </select>
+      </div>
+    </div>
+  </form>
+
+  <br>
+  <div class="list-group">
+    <div 
+      *ngFor="let task of filteredTasks; trackBy: trackByTaskId"
+      class="list-group-item list-group-item-action mb-3"
+    >
+      <div class="d-flex w-100 justify-content-between align-items-start">
+        <!-- task details on left -->
+        <div class="flex-grow-1">
+          
+          <div class="mb-2">
+            <span class="badge me-2" [ngClass]="getStatusClass(task.status.toString())">
+              {{ getStatusLabel(task.status.toString()) }}
+            </span>
+            <span class="badge me-2" [ngClass]="getPriorityClass(task.priority)">
+              <i class="bi bi-flag-fill"></i> {{ getPriorityLabel(task.priority) }}
+            </span>
+            <span *ngIf="isOverdue(task)" class="badge bg-danger">
+              <i class="bi bi-exclamation-circle"></i> Overdue
+            </span>
+          </div>
+          
+          <h5 class="mb-2 fw-bold">{{ task.title }}</h5>
+        
+          <p class="mb-2 text-muted">{{ task.description }}</p>
+          
+          <!-- Dates -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="small text-muted">
+              <i class="bi bi-clock text-secondary"></i>
+              <strong>Created:</strong> {{ formatDate(task.createdAt.toString()) }}
+            </div>
+          
+            <div class="small text-muted">
+              <i class="bi bi-calendar-event text-primary"></i>
+              <strong>Due:</strong> 
+              <span [ngClass]="{'text-danger': isOverdue(task)}">
+                {{ task.dueDate ? formatDate(task.dueDate.toString()) : 'No due date' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="d-flex gap-2 ms-3">
+          <button 
+            class="btn btn-sm btn-outline-primary" 
+            title="Edit task"            
+            routerLink="/tasks/edit"
+            (click)="editTask(task.id)"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button 
+            class="btn btn-sm btn-outline-danger" 
+            (click)="deleteTask(task.id)"
+            title="Delete task"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    
+    <div *ngIf="!searchQuery && filteredTasks.length === 0 " class="text-center py-5">
+      <i class="bi bi-inbox display-1 text-muted"></i>
+      <p class="mt-3 text-muted">No tasks available. Create your first task here. :- 
+        <button type="button" class="btn btn-link" (click)="navigate()">New Task</button>
+        </p>            
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<a class="nav-link" 
+routerLink="/home"><h4><i class="bi bi-arrow-left"></i>Back to List</h4></a>
+<br>
+
+<div class="card">
+   
+    <div class="card-header">
+        <h3>{{ isEditMode ? 'Edit Task' : 'Create New Task' }}</h3>
+    </div>
+    <div class="card-body">
+        <form  [formGroup]="form">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input
+                class="form-control"
+                type="text"
+                id="title"
+                name="title"
+                class="form-control"
+                formControlName="title"
+                required
+              />
+            </div>
+        
+            <div>
+              <label for="description">Description</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                class="form-control"
+                formControlName="description"
+                rows="4"
+              ></textarea>
+            </div>
+            <br>
+            <div class="row g-2 align-items-center">            
+                <div class="col-auto flex-grow-1">
+                  <label for="status" class="form-label mb-0 me-2">Status</label>
+                  <select id="status" class="form-select form-select-sm py-2" formControlName="status">
+                    <option selected></option>
+                    <option value="1">To Do</option>
+                    <option value="2">In Progress</option>
+                    <option value="3">Completed</option>
+                  </select>
+                </div>
+        
+                <div class="col-auto flex-grow-1">
+                  <label for="priority" class="form-label mb-0 me-2">Priority</label>
+                  <select id="priority" class="form-select form-select-sm py-2" formControlName="priority">
+                    <option selected></option>
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3">High</option>
+                  </select>
+                </div>          
+               
+                <div class="col-auto flex-grow-1">
+                  <label for="dueDate" class="form-label mb-0 me-2">Due Date</label>
+                  <input id="dueDate" type="date" class="form-control form-control-sm py-2" [min]="minDate" formControlName="dueDate">
+                </div>
+            </div>
+
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-primary" (click)="performTask()">{{ isEditMode ? 'Update' : 'Create Task' }}</button>
+                <button  (click)="cancel()"  class="btn btn-outline-warning mx-3">Cancel</button>
+            </div>
+        </form>          
+    </div>
+</div>
+

@@ -1,0 +1,53 @@
+.list-group-item {
+    transition: all 0.2s ease;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .list-group-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .list-group-item h5 {
+    color: #2c3e50;
+    font-size: 1.1rem;
+  }
+  
+  .list-group-item p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+  }
+  
+  .btn-sm {
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .btn-sm i {
+    font-size: 1rem;
+  }
+  
+  /* Overdue border indicator */
+  .border-start.border-danger {
+    border-width: 4px !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .d-flex.justify-content-between {
+      flex-direction: column;
+    }
+    
+    .d-flex.gap-2.ms-3 {
+      margin-left: 0 !important;
+      margin-top: 1rem;
+      justify-content: flex-start;
+    }
+  }
