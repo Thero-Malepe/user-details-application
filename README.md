@@ -19,13 +19,29 @@ Each service runs in its own container:
 - `postgres` → PostgreSQL database  
 
 ### 🐳 Running the Application with Docker
+- Create a file named `.env` in the root directory
+- Add the following configurations
+
+    POSTGRES_PASSWORD=<Your PostgreSQL Password>
+    DB_CONNECTION=Host=<Your DB Connection String>
+    JWT_TOKEN=<Your Encryption token>
+    SMTP_USERNAME=<Your SMTP Username>
+    SMTP_PASSWORD=<Your SMTP Password>
 
 - Open Docker Desktop
 
 From the project root:
 - In command prompt: `docker compose up --build`
 
-### 🐳 Running the Application build Script
+### 🐳 Running the Application the build Script
+- Create a file named `.env` in the root directory
+- Add the following configurations
+
+    POSTGRES_PASSWORD=<Your PostgreSQL Password>
+    DB_CONNECTION=Host=<Your DB Connection String>
+    JWT_TOKEN=<Your Encryption token>
+    SMTP_USERNAME=<Your SMTP Username>
+    SMTP_PASSWORD=<Your SMTP Password>
 
 - Open Docker Desktop
 

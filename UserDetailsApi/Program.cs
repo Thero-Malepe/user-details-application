@@ -90,11 +90,9 @@ namespace UserDetailsApi
             // Add CORS policy
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("LocalCors", policy =>
+                options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.WithOrigins(
-                        "http://localhost:4200"
-                    )
+                    policy.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -103,6 +101,7 @@ namespace UserDetailsApi
                 options.AddPolicy("DockerCors", policy =>
                 {
                     policy.WithOrigins(
+                        "http://localhost:4200",
                         "http://host.docker.internal:4200"
                     )
                     .AllowAnyHeader()
@@ -128,7 +127,7 @@ namespace UserDetailsApi
             if (app.Environment.IsDevelopment())
             {
                 // Use CORS
-                app.UseCors("LocalCors");
+                app.UseCors("AllowAll");
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

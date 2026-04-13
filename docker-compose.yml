@@ -18,6 +18,7 @@ services:
     ports:
       - "5066:5066"
     environment:
+      ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5066
       ConnectionStrings__UserDetailsDb: ${DB_CONNECTION}
       JwtSettings__Token: ${JWT_TOKEN}
