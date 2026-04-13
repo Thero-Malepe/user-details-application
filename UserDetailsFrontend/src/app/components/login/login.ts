@@ -52,6 +52,7 @@ export class Login implements OnInit{
           localStorage.setItem('token', response.accessToken);
           localStorage.setItem('userEmail', this.loginDto.email);
           localStorage.setItem('refreshToken', response.refreshToken);
+          this.authService.setLoggedIn();
           
           this.router.navigate(['/home']);
         },

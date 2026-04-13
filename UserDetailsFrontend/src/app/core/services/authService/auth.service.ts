@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { UserDto } from '../../models/userDto.model';
 import { User } from '../../models/user.model';
@@ -16,6 +16,8 @@ import { ResetDto } from '../../models/resetDto.model';
 export class AuthService {
 
   public apiUrl = environment.apiBaseUrl;
+  private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
+  isLoggedIn$ = this.loggedIn.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -52,10 +54,15 @@ export class AuthService {
   logout()
   {    
     localStorage.clear();
+    this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn()
+  setLoggedIn() {
+    this.loggedIn.next(true);
+  }
+
+  isLoggedIn(): boolean
   {
     return !!localStorage.getItem('token');
   }

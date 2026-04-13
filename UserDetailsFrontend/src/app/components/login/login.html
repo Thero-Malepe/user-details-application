@@ -14,9 +14,13 @@
                 required
               >
             </div>
-            <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-danger">
-                Email is required
-            </div>
+            
+            @if(form.get('email')?.touched && form.get('email')?.invalid)
+            {
+                <div class="text-danger">
+                    Email is required
+                </div>
+            }
 
             <div class="form-group">
               <label for="password">Password</label>
@@ -28,12 +32,21 @@
                 required
               >
             </div>
-            <div *ngIf="form.get('password')?.touched && form.get('password')?.value == ''" class="text-danger">
+            
+            @if(form.get('password')?.touched && form.get('password')?.value == '')
+            {
+                <div class="text-danger">
                     Password is required
-            </div>
-             <div *ngIf="form.get('password')?.invalid" class="text-danger">
+                </div>
+            }
+
+            @if(form.get('password')?.invalid)
+            {
+                <div class="text-danger">
                     Password length must be between 8 and 15 characters
-            </div>
+                </div>
+            }
+             
             <div class="d-flex">
                 <button type="button" class="btn btn-link" (click)="toggle()">Register here?</button>
             </div>

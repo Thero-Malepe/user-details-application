@@ -85,14 +85,15 @@
         </div>
       </div>
     </div>
-
     
-    <div *ngIf="!searchQuery && filteredTasks.length === 0 " class="text-center py-5">
-      <i class="bi bi-inbox display-1 text-muted"></i>
-      <p class="mt-3 text-muted">No tasks available. Create your first task here. :- 
-        <button type="button" class="btn btn-link" (click)="navigate()">New Task</button>
+    @if(!searchQuery && filteredTasks.length === 0)
+    {
+      <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 text-muted"></i>
+        <p class="mt-3 text-muted">No tasks available. Create your first task here. :- 
+          <button type="button" class="btn btn-link" (click)="navigate()">New Task</button>
         </p>            
-    </div>
-
+      </div>
+    }
   </div>
 </div>

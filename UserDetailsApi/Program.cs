@@ -90,12 +90,26 @@ namespace UserDetailsApi
             // Add CORS policy
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("LocalCors", policy =>
                 {
-                    policy.AllowAnyOrigin()
-                                    .AllowAnyHeader()
-                                    .AllowAnyMethod();
+                    policy.WithOrigins(
+                        "http://localhost:4200"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
+
+                options.AddPolicy("DockerCors", policy =>
+                {
+                    policy.WithOrigins(
+                        "http://host.docker.internal:4200"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+
             });
 
             var app = builder.Build();
@@ -110,14 +124,17 @@ namespace UserDetailsApi
                 db.Database.Migrate();
             }
 
-            // Use CORS
-            app.UseCors("AllowAll");
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                // Use CORS
+                app.UseCors("LocalCors");
                 app.UseSwagger();
                 app.UseSwaggerUI();
+            }
+            else
+            {
+                app.UseCors("DockerCors");
             }
 
             //app.UseHttpsRedirection();

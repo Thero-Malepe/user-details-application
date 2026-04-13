@@ -3,6 +3,10 @@
   <nav class="navbar sticky-top bg-dark border-bottom border-body py-2" data-bs-theme="dark">
       <div class="container-fluid">
         <a class="navbar-brand"><h3 routerLink="/home" class="clickable">📋 {{title}}</h3></a>
+        @if(isLoggedIn)
+        {
+          <button class="btn btn-primary" (click)="logout()"> Logout </button>
+        }
         
       </div>
     </nav>
