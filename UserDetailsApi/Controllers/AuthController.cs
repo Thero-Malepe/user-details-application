@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Net.Mail;
-using UserDetailsApi.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
 
 namespace UserDetailsApi.Controllers
@@ -60,13 +56,13 @@ namespace UserDetailsApi.Controllers
 
         [HttpPost()]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPasswor([FromBody] ResetDto details)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetDto details)
         {
             var result = await authManager.ResetPassword(details);
             if (!result)
                 return NotFound();
 
             return Ok();
-        }
+        } 
     }
 }

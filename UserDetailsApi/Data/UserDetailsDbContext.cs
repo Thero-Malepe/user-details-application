@@ -7,5 +7,6 @@ namespace UserDetailsApi.Data
     {
         public DbSet<User> Users { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        public DbSet<TaskModel> Tasks { get; set; }
     }
 }

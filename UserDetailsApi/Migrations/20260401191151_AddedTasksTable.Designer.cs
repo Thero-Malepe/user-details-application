@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UserDetailsApi.Data;
@@ -11,9 +12,11 @@ using UserDetailsApi.Data;
 namespace UserDetailsApi.Migrations
 {
     [DbContext(typeof(UserDetailsDbContext))]
-    partial class UserDetailsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401191151_AddedTasksTable")]
+    partial class AddedTasksTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UserDetailsApi.Controllers;
 using UserDetailsApi.DTOs;
+using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
 using UserDetailsApi.Models;
 

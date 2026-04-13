@@ -47,6 +47,7 @@ namespace UserDetailsApi
 
             builder.Services.AddScoped<IAuthManagerService, AuthManagerService>();
             builder.Services.AddScoped<IUserDetailsService, UserDetailsService>();
+            builder.Services.AddScoped<ITaskManagerService, TaskManagereService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
