@@ -94,8 +94,7 @@ namespace UserDetailsApi
                 {
                     policy.AllowAnyOrigin()
                     .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+                    .AllowAnyMethod();
                 });
 
                 options.AddPolicy("DockerCors", policy =>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserDetailsApi.Interfaces;
 
 
@@ -10,16 +11,17 @@ namespace UserDetailsApi.Controllers
     [Authorize]
     public class UserDetailsController(IUserDetailsService detailsService) : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetUserDetails([FromQuery] string email)
+        [HttpGet("user-details")]
+        public async Task<IActionResult> GetUserDetails()
         {
-            var user = await detailsService.GetUserDetails(email);
-            if(user is null)
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if(email is null)
             {
-                return NotFound("User details not found");
+                return NotFound();
             }
+            var details = await detailsService.GetUserDetails(email);
 
-            return Ok(user);        
+            return details is null ? NotFound() : Ok(details);
         }
     }
 }
