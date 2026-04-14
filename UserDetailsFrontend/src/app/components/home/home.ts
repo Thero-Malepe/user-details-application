@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { UserDetailsService } from '../../core/services/userDetailsService/user-details.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../core/services/authService/auth.service';
+import { Loader } from '../loader/loader';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 
 @Component({
@@ -17,35 +19,46 @@ export class Home implements OnInit {
   isLogin: boolean = false;
   form!: FormGroup;
   details: any;
+  isLoggedIn = false;
 
   constructor(
     private authService: AuthService,
     private fb: FormBuilder, 
+    private loader: LoaderService, 
     private modalService: NgbModal,
     private router: Router,
     private User: UserDetailsService
   ) {   }
 
-  ngOnInit() {
+  ngOnInit() { 
+    this.loader.show();
+    this.authService.isLoggedIn$.subscribe((status) =>{
+      this.isLoggedIn = status;
+    });
+
+    if(this.isLoggedIn)
+    {
+      this.loadUserDetails();
+      setTimeout(() => {
+          this.loader.hide();
+        }, 
+        4000
+      )
+    }
+    else{
+      this.logout();
+    }
+    
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
     });
-
-    var userEmail = localStorage.getItem('userEmail')!;
-    if(userEmail)
-    {
-      this.loadUserDetails(userEmail);
-    }
-    else{
-      this.logout();
-    }     
   }
 
-  loadUserDetails(email: string)
+  loadUserDetails()
   {
-    this.User.getDetailsByEmail(email).subscribe({
+    this.User.getDetailsByEmail().subscribe({
       next: (response) => { 
         this.form.patchValue({
           firstName: response.firstName,

@@ -1,3 +1,4 @@
+<app-loader></app-loader>
 <div class="card">   
     <div class="card-header">
         <h3>Register</h3>
@@ -74,7 +75,7 @@
                     required
                 >
             </div>
-            
+
             @if(form.get('lastName')?.touched && form.get('lastName')?.invalid)
             {
                 <div class="text-danger">

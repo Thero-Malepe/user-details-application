@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/authService/auth.service';
 import { UserDto } from '../../core/models/userDto.model';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 @Component({
   selector: 'app-login',
@@ -18,16 +19,24 @@ export class Register implements OnInit{
   constructor(
     private authService: AuthService,
     private fb: FormBuilder, 
+    private loader: LoaderService, 
     private router: Router
   ) {  }
 
   ngOnInit() {
+    this.loader.show();
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
     }); 
+
+    setTimeout(() => {
+        this.loader.hide();
+      }, 
+      4000
+    );
   }
 
   toggle()

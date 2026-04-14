@@ -14,6 +14,7 @@ import { ResetPasswordComponent } from './components/reset-password-component/re
 import { ForgotPassword } from './components/forgot-password/forgot-password';
 import { TaskForm } from './components/task-form/task-form';
 import { TaskList } from './components/task-list/task-list';
+import { Loader } from './components/loader/loader';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TaskList } from './components/task-list/task-list';
     ResetPasswordComponent,
     ForgotPassword,
     TaskForm,
-    TaskList
+    TaskList,
+    Loader
   ],
   imports: [
     AppRoutingModule,

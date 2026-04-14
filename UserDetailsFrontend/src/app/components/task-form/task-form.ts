@@ -6,6 +6,7 @@ import { Status } from '../../core/enums/status.enum';
 import { Task } from '../../core/models/task.model';
 import { TaskModel } from '../../core/models/taskDto.model';
 import { TaskService } from '../../core/services/taskService/task-service';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 @Component({
   selector: 'app-task-form',
@@ -25,6 +26,7 @@ export class TaskForm implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder, 
+    private loader: LoaderService, 
     private taskService: TaskService
   ) { 
     const navigation = this.router.getCurrentNavigation();
@@ -34,6 +36,7 @@ export class TaskForm implements OnInit {
   }
 
   ngOnInit() { 
+    this.loader.show();
     this.route.paramMap.subscribe(params => {
       this.taskId = params.get('taskId');
     });
@@ -49,6 +52,12 @@ export class TaskForm implements OnInit {
     if (this.isEditMode) {
       this.loadTask(this.taskId!);
     }    
+
+    setTimeout(() => {
+        this.loader.hide();
+      }, 
+      4000
+    );
   }
 
   loadTask(taskId: string) {

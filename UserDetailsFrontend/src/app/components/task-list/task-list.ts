@@ -4,6 +4,7 @@ import { Priority } from '../../core/enums/priority.enum';
 import { Status } from '../../core/enums/status.enum';
 import { TaskService } from '../../core/services/taskService/task-service';
 import { Task } from '../../core/models/task.model';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 @Component({
   selector: 'app-task-list',
@@ -17,14 +18,24 @@ export class TaskList implements OnInit {
   searchQuery: string = '';
   sortOrder: 'dueDate:asc' | 'dueDate:desc' = 'dueDate:asc';
   
-  constructor(private taskService: TaskService, private router: Router,) {}
+  constructor(
+    private taskService: TaskService,
+    private loader: LoaderService, 
+    private router: Router,) {}
 
   ngOnInit() {   
+    this.loader.show();
     this.taskService.getTasks().subscribe((response) => {
       this.tasks = response;
       this.filteredTasks = [...this.tasks];
       this.applyFilters();
     });    
+
+    setTimeout(() => {
+        this.loader.hide();
+      }, 
+      4000
+    );
   }
 
   navigate(){

@@ -4,6 +4,7 @@ import { LoginDto } from '../../core/models/loginDto.model';
 import { AuthService } from '../../core/services/authService/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResetDto } from '../../core/models/resetDto.model';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 @Component({
   selector: 'app-reset-password-component',
@@ -21,11 +22,13 @@ export class ResetPasswordComponent implements OnInit{
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
+    private loader: LoaderService, 
     private route: ActivatedRoute, 
     private router: Router
   ) {  }
 
   ngOnInit() {
+    this.loader.show();
     this.email = this.route.snapshot.queryParamMap.get('email')!;
     this.token = this.route.snapshot.queryParamMap.get('token')!;
 
@@ -33,6 +36,12 @@ export class ResetPasswordComponent implements OnInit{
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]]
     }); 
+
+    setTimeout(() => {
+        this.loader.hide();
+      }, 
+      4000
+    );
   }
 
   toggle()

@@ -1,3 +1,4 @@
+<app-loader></app-loader>
 <div class="card">   
     <div class="card-header">
         <h3>Login</h3>
@@ -14,7 +15,7 @@
                 required
               >
             </div>
-            
+
             @if(form.get('email')?.touched && form.get('email')?.invalid)
             {
                 <div class="text-danger">

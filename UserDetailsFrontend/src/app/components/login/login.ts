@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/authService/auth.service';
 import { LoginDto } from '../../core/models/loginDto.model';
+import { LoaderService } from '../../core/services/loaderService/loader-service';
 
 @Component({
   selector: 'app-login',
@@ -17,15 +18,21 @@ export class Login implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
+    private loader: LoaderService, 
     private router: Router
   ) {  }
 
   ngOnInit() {
+    this.loader.show();
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
       email: ['', [Validators.required, Validators.email]]
     }); 
+
+    setTimeout(() => {
+      this.loader.hide();
+    }, 4000);
   }
 
   toggle()
@@ -50,7 +57,6 @@ export class Login implements OnInit{
           alert('Successfully logged in');
 
           localStorage.setItem('token', response.accessToken);
-          localStorage.setItem('userEmail', this.loginDto.email);
           localStorage.setItem('refreshToken', response.refreshToken);
           this.authService.setLoggedIn();
           
