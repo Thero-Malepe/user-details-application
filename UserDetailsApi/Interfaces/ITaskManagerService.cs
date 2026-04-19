@@ -5,10 +5,11 @@ namespace UserDetailsApi.Interfaces
 {
     public interface ITaskManagerService
     {
-        Task<List<TaskModel>?> GetTasks();
-        Task<TaskModel?> GetTaskById(int id);
-        Task<TaskModel?> UpdateTask(TaskModel taskModel);
-        Task<TaskModel?> CreateTask(TaskDto taskModel);
+        Task<List<TaskResponseDto>?> GetTasks();
+        Task<TaskResponseDto?> GetTaskById(int id);
+        Task<List<TaskResponseDto>?> GetTasksByUserId(string userId);
+        Task<TaskResponseDto?> UpdateTask(int id, TaskDto taskModel);
+        Task<TaskResponseDto?> CreateTask(string userId, TaskDto taskModel);
         Task<bool> DeleteTask(int id);
     }
 }

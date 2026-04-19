@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using UserDetailsApi.Data;
 using UserDetailsApi.DTOs.TaskManagerDtos;
 using UserDetailsApi.Interfaces;
@@ -6,19 +7,21 @@ using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Services
 {
-    public class TaskManagereService(UserDetailsDbContext context, ILogger<TaskManagereService> logger) : ITaskManagerService
+    public class TaskManagereService(UserDetailsDbContext context, ILogger<TaskManagereService> logger, IMapper mapper) : ITaskManagerService
     {
-        public async Task<TaskModel?> CreateTask(TaskDto taskModel)
+        public async Task<TaskResponseDto?> CreateTask(string userId, TaskDto taskModel)
         {
             logger.LogInformation("Creating task");
-            var newTask = new TaskModel
+
+            TaskModel newTask = new()
             {
                 Title = taskModel.Title,
                 Description = taskModel.Description,
                 Status = taskModel.Status,
                 Priority = taskModel.Priority,
                 DueDate = taskModel.DueDate?.ToUniversalTime(),
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId,
             };
 
             context.Tasks.Add(newTask);
@@ -27,14 +30,14 @@ namespace UserDetailsApi.Services
             if (rowsAffected > 0)
             {
                 logger.LogInformation("Task created with ID: {newTask.Id}", newTask.Id);
-                return newTask;
+                return mapper.Map<TaskResponseDto>(newTask);
             }
 
             logger.LogInformation("Task not created");
             return null;
         }
 
-        public async Task<List<TaskModel>?> GetTasks()
+        public async Task<List<TaskResponseDto>?> GetTasks()
         {
             logger.LogInformation("Retrieving all tasks");
             var tasks = await context.Tasks.ToListAsync();
@@ -42,16 +45,43 @@ namespace UserDetailsApi.Services
             if (tasks is not null)
             {
                 logger.LogInformation("Tasks retrieved");
-                return tasks;
+                List<TaskResponseDto> taskListDto = new();
+
+                foreach ( var item in tasks)
+                {
+                    taskListDto.Add(mapper.Map<TaskResponseDto>(item));
+                }
+                return taskListDto;
             }                
 
             logger.LogInformation("No tasks retrieved");
             return null;
         }
 
-        public async Task<TaskModel?> GetTaskById(int id)
+        public async Task<List<TaskResponseDto>?> GetTasksByUserId(string userId)
         {
-            logger.LogInformation("Retrieving task with ID: {tt}", id);
+            logger.LogInformation("Retrieving all tasks for user with ID: {id}", userId);
+            var tasks = await context.Tasks.Where(p => p.UserId == userId).ToListAsync();
+
+            if (tasks is not null)
+            {
+                logger.LogInformation("Tasks retrieved for user with ID: {id}", userId);
+                List<TaskResponseDto> taskListDto = [];
+
+                foreach (var item in tasks)
+                {
+                    taskListDto.Add(mapper.Map<TaskResponseDto>(item));
+                }
+                return taskListDto;
+            }
+
+            logger.LogInformation("No tasks retrieved");
+            return null;
+        }
+
+        public async Task<TaskResponseDto?> GetTaskById(int id)
+        {
+            logger.LogInformation("Retrieving task with ID: {id}", id);
             var taskModel = await context.Tasks.FindAsync(id);
 
             if (taskModel is null)
@@ -61,30 +91,26 @@ namespace UserDetailsApi.Services
             }
 
             logger.LogInformation("Task with ID: {id} retrieved", id);
-            return taskModel;
+            return mapper.Map<TaskResponseDto>(taskModel);
         }
 
-        public async Task<TaskModel?> UpdateTask(TaskModel taskModel)
+        public async Task<TaskResponseDto?> UpdateTask(int id, TaskDto taskModel)
         {
-            logger.LogInformation("Updating task with ID: {taskModel.Id}", taskModel.Id);
+            logger.LogInformation("Updating task with ID: {taskModel.Id}", id);
 
-            var existingTask = await context.Tasks.FindAsync(taskModel.Id);
+            var existingTask = await context.Tasks.FindAsync(id);
             if (existingTask is null)
             {
-                logger.LogInformation("Task with ID: {id} not found", taskModel.Id);
+                logger.LogInformation("Task with ID: {id} not found", id);
                 return null;
             }
 
-            existingTask.Title = taskModel.Title;
-            existingTask.Description = taskModel.Description;
-            existingTask.Status = taskModel.Status;
-            existingTask.Priority = taskModel.Priority;
-            existingTask.DueDate = taskModel.DueDate?.ToUniversalTime();
-
+            taskModel.DueDate = taskModel.DueDate?.ToUniversalTime();
+            mapper.Map(taskModel, existingTask);
             await context.SaveChangesAsync();
+            logger.LogInformation("Task with ID: {id} updated", id);
 
-            logger.LogInformation("Task with ID: {id} updated", taskModel.Id);
-            return existingTask;
+            return mapper.Map<TaskResponseDto>(existingTask);            
         }
 
         public async Task<bool> DeleteTask(int id)

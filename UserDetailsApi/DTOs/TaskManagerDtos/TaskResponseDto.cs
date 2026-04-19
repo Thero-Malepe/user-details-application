@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UserDetailsApi.Enums;
 
-namespace UserDetailsApi.Models
+namespace UserDetailsApi.DTOs.TaskManagerDtos
 {
-    public class TaskModel
+    public class TaskResponseDto
     {
         public int Id { get; set; }
-
-        public string UserId { get; set; } = string.Empty;
 
         [Required]
         public string Title { get; set; } = string.Empty;
@@ -22,7 +20,6 @@ namespace UserDetailsApi.Models
 
         public DateTime? DueDate { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        public DateTime CreatedAt { get; set; }
     }
 }

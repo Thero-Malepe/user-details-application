@@ -169,7 +169,7 @@ namespace UserDetailsApi.Tests
                 .ReturnsAsync(detailsResponse);
 
             // Act
-            var result = await _userDetailcontroller.GetUserDetails(email);
+            var result = await _userDetailcontroller.GetUserDetails();
 
             // Assert
             var ok = result.Should().BeOfType<OkObjectResult>().Subject;
@@ -188,7 +188,7 @@ namespace UserDetailsApi.Tests
                 .ReturnsAsync((UserDetailsDto?)null);
 
             // Act
-            var result = await _userDetailcontroller.GetUserDetails(email);
+            var result = await _userDetailcontroller.GetUserDetails();
 
             // Assert
             var notFound = result.Should().BeOfType<NotFoundObjectResult>().Subject;

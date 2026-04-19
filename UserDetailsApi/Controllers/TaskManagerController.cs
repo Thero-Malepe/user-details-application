@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserDetailsApi.DTOs.TaskManagerDtos;
 using UserDetailsApi.Interfaces;
-using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Controllers
 {
@@ -14,7 +14,8 @@ namespace UserDetailsApi.Controllers
         [HttpPost("add-task")]
         public async Task<IActionResult> CreateTask(TaskDto taskModel)
         {
-            var result = await taskInterface.CreateTask(taskModel);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
+            var result = await taskInterface.CreateTask(userId, taskModel);
             if (result is not null)
             {
                 return CreatedAtAction(nameof(CreateTask), new { id = result.Id }, result);
@@ -24,7 +25,8 @@ namespace UserDetailsApi.Controllers
         }
 
         [HttpGet("get-tasks")]
-        public async Task<IActionResult> GetTasks()
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await taskInterface.GetTasks();
             return Ok(tasks);
@@ -49,10 +51,30 @@ namespace UserDetailsApi.Controllers
             return Ok(task);
         }
 
-        [HttpPut("update-task/")]
-        public async Task<IActionResult> UpdateTask(TaskModel taskModel)
+        [HttpGet("get-task-by-user")]
+        public async Task<IActionResult> GetTasksByUserId()
         {
-            var result = await taskInterface.UpdateTask(taskModel);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
+            var task = await taskInterface.GetTasksByUserId(userId);
+
+            if (task is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Type = "error",
+                    Title = "Not Found",
+                    Status = StatusCodes.Status404NotFound,
+                    Detail = $"No tasks found for user ID {userId}."
+                });
+            }
+
+            return Ok(task);
+        }
+
+        [HttpPut("update-task/{id}")]
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskDto taskModel)
+        {
+            var result = await taskInterface.UpdateTask(id, taskModel);
 
             if (result is not null)
                 return Ok(result);
@@ -62,7 +84,7 @@ namespace UserDetailsApi.Controllers
                 Type = "error",
                 Title = "Not Found",
                 Status = StatusCodes.Status404NotFound,
-                Detail = $"No task with ID {taskModel.Id} exists."
+                Detail = $"No task with ID {id} exists."
             });
         }
 

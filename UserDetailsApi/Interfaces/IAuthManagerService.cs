@@ -9,6 +9,8 @@ namespace UserDetailsApi.Interfaces
         Task<TokenResponseDto?> Login(LoginDto apiUserloginDto);
         Task<TokenResponseDto?> RefreshToken(RefreshTokenDto request);
         Task<bool> PasswordResetEmail(string email);
-        Task<bool> ResetPassword(ResetDto email);
+        Task<bool> ResetPassword(ResetDto email); 
+        Task<PasswordResetToken?> ValidateResetToken(string token);
+        Task<bool?> DeleteUser(string userId);
     }
 }

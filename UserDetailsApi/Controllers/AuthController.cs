@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
 
@@ -63,6 +65,33 @@ namespace UserDetailsApi.Controllers
                 return NotFound();
 
             return Ok();
-        } 
+        }
+
+        [HttpGet()]
+        [Route("validate-token")]
+        public async Task<IActionResult> ValidateToken(string token)
+        {
+            var result = await authManager.ValidateResetToken(token);
+            if (result is null)
+                return NotFound();
+
+            return Ok();
+        }
+
+        [HttpDelete()]
+        [Route("delete-user")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
+            var result = await authManager.DeleteUser(userId);
+            if (result is null)
+                return BadRequest();
+
+            if(result == true)
+                return NoContent();
+
+            return NotFound();
+        }
     }
 }
