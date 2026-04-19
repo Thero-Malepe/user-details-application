@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/authService/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResetDto } from '../../core/models/resetDto.model';
 import { LoaderService } from '../../core/services/loaderService/loader-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-reset-password-component',
@@ -38,9 +39,7 @@ export class ResetPasswordComponent implements OnInit{
     }
     else{
       this.authService.validateToken(this.token).subscribe({
-        next: () => {           
-            
-          },
+        next: () => {},
         error: () => {
           this.router.navigate(['/forbidden']);
         }
@@ -58,11 +57,6 @@ export class ResetPasswordComponent implements OnInit{
     );
   }
 
-  toggle()
-  {
-    this.router.navigate(['/login']);
-  }
-
   logout()
   {
     this.authService.logout();
@@ -77,18 +71,15 @@ export class ResetPasswordComponent implements OnInit{
       this.resetDto.token = this.token;
 
       this.authService.resetPassword(this.resetDto).subscribe({
-        next: (response) => { 
-          alert('Password successfully changed');
-          
+        next: () => { 
+          alert('Password successfully changed');          
           this.router.navigate(['/login']);
         },
-        error: () => {
-          alert('Something went wrong, please try again');
+        error: (error: HttpErrorResponse) => {
+          if (error.status == 404)
+            this.router.navigate(['/forbidden']);
         }
-      });
-      
-    }else{
-      alert('Form Invalid');
-    }    
+      });      
+    }   
   }
 }

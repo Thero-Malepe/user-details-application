@@ -56,6 +56,12 @@ export class AuthService {
       `${this.apiUrl}/Auth/validate-token?token=${encodeURIComponent(token)}`
     );
   }
+
+  deleteAccount(): Observable<any>  {
+    return this.http.get<TokenResponseDto>(
+      `${this.apiUrl}/Auth/delete-user`
+    );
+  }
   
   logout()
   {    

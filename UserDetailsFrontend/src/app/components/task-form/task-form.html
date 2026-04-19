@@ -58,13 +58,13 @@
                
                 <div class="col-auto flex-grow-1">
                   <label for="dueDate" class="form-label mb-0 me-2">Due Date</label>
-                  <input id="dueDate" type="date" class="form-control form-control-sm py-2" [min]="minDate" formControlName="dueDate">
+                  <input id="dueDate" type="date" class="form-control form-control-sm py-2" formControlName="dueDate">
                 </div>
             </div>
 
             <div class="card-footer text-right">
-                <button type="submit" class="btn btn-primary" (click)="performTask()">{{ isEditMode ? 'Update' : 'Create Task' }}</button>
-                <button  (click)="cancel()"  class="btn btn-outline-warning mx-3">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="performTask()">{{ isEditMode ? 'Update' : 'Create Task' }}</button>
+                <button routerLink="/home" class="btn btn-outline-warning mx-3">Cancel</button>
             </div>
         </form>          
     </div>

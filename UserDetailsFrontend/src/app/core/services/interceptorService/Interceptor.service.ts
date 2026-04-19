@@ -18,6 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    //Before request is sent
     const accessToken = localStorage.getItem('token');
 
     // Attach token to request
@@ -30,6 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
       });
     }
 
+    //After request is sent with api response
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
 
@@ -77,6 +79,11 @@ export class AuthInterceptor implements HttpInterceptor {
               return throwError(() => refreshError);
             })
           );
+        }
+
+        if (error.status === 500)
+        {
+          alert("Something Went wrong, please try again later.");
         }
 
         return throwError(() => error);

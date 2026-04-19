@@ -7,6 +7,7 @@ import { Task } from '../../core/models/task.model';
 import { TaskModel } from '../../core/models/taskDto.model';
 import { TaskService } from '../../core/services/taskService/task-service';
 import { LoaderService } from '../../core/services/loaderService/loader-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-task-form',
@@ -19,7 +20,6 @@ export class TaskForm implements OnInit {
   form!: FormGroup;
   task: Task = new Task();
   taskModel: TaskModel = new TaskModel();
-  minDate = new Date().toString().split("T")[0];
   taskId: string = '';
 
   constructor(
@@ -61,21 +61,23 @@ export class TaskForm implements OnInit {
   }
 
   loadTask(taskId: string) {
-    this.taskService.getTaskById(+taskId).subscribe((response) =>{
-      if (response) {
-        this.form.patchValue({
-          title: response.title,
-          description: response.description,
-          status: response.status,
-          priority: response.priority,
-          dueDate: response.dueDate?.toString().split("T")[0]
-        });
+    this.taskService.getTaskById(+taskId).subscribe({
+      next: (response) => {
+        if (response) {
+          this.form.patchValue({
+            title: response.title,
+            description: response.description,
+            status: response.status,
+            priority: response.priority,
+            dueDate: response.dueDate?.toString().split("T")[0]
+          });
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        if(error.status === 404)
+          alert("Task not found.")
       }
-    });    
-  }
-
-  cancel() {
-    this.router.navigate(['/home']);
+    });
   }
 
   performTask()
@@ -114,20 +116,29 @@ export class TaskForm implements OnInit {
       
       if(this.isEditMode)
       {
-        this.taskService.updateTask(+this.taskId ,this.task).subscribe(() =>{
-          alert('Task updated');
-          this.router.navigate(['/home']);
+        this.taskService.updateTask(+this.taskId ,this.task).subscribe({
+          next: () => {
+            this.loader.show();
+            this.router.navigate(['/home']);
+          },
+          error: (error: HttpErrorResponse) => {
+            if(error.status === 400 )
+              alert("Form invalid");            
+          }
         });
       }
       else{
-        this.taskService.CreateTask(this.task).subscribe(() =>{
-          alert('Task created');
-          this.router.navigate(['/home']);
+        this.taskService.CreateTask(this.task).subscribe({
+          next: () => {
+            this.loader.show();
+            this.router.navigate(['/home']);
+          },
+          error: (error: HttpErrorResponse) => {
+            if(error.status === 400 )
+              alert("Form invalid");
+          }          
         });
-      }
-      
-    }else{
-      alert('Form Invalid');
-    }    
+      }      
+    }   
   }
 }

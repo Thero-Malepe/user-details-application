@@ -84,11 +84,11 @@
             }
             <br>
             <div class="d-flex">
-                <button type="button" class="btn btn-link" (click)="toggle()">Login here?</button>
+                <button type="button" class="btn btn-link" routerLink="/login">Login here?</button>
             </div>
 
             <div class="card-footer text-right">
-                <button type="submit" class="btn btn-primary" (click)="register()">Register</button>
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid" (click)="register()">Register</button>
             </div>
         </form>          
     </div>

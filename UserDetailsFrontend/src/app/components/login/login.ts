@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/authService/auth.service';
 import { LoginDto } from '../../core/models/loginDto.model';
 import { LoaderService } from '../../core/services/loaderService/loader-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -35,16 +36,6 @@ export class Login implements OnInit{
     }, 4000);
   }
 
-  toggle()
-  {
-    this.router.navigate(['/register']);
-  }
-
-  forgot()
-  {
-    this.router.navigate(['/forgot-password']);
-  }
-
   login()
   {
     if(!this.form.invalid)
@@ -53,22 +44,19 @@ export class Login implements OnInit{
       this.loginDto.password = this.form.get('password')?.value;
 
       this.authService.login(this.loginDto).subscribe({
-        next: (response) => { 
-          alert('Successfully logged in');
-
+        next: (response) => {
           localStorage.setItem('token', response.accessToken);
           localStorage.setItem('refreshToken', response.refreshToken);
           this.authService.setLoggedIn();
           
           this.router.navigate(['/home']);
         },
-        error: () => {
-          alert('Email or password is incorrect');
+        error: (error: HttpErrorResponse) => {
+          if(error.status === 400 )
+            alert("Incorrect Email or Password"); 
         }
       });
       
-    }else{
-      alert('Form Invalid');
-    }    
+    }   
   }
 }

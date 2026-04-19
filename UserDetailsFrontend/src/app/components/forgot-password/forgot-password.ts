@@ -34,11 +34,6 @@ export class ForgotPassword implements OnInit {
     );
   }
 
-  toggle()
-  {
-    this.router.navigate(['/register']);
-  }
-
   SendEmail()
   {
     if(!this.form.invalid)
@@ -46,18 +41,11 @@ export class ForgotPassword implements OnInit {
       var email = this.form.get('email')?.value;
 
       this.authService.forgotPassword(email).subscribe({
-        next: (response: string) => { 
-          alert('If the email exists, a reset link has been sent');          
-          this.router.navigate(['/login']);
+        next: () => { 
+          alert('If this email exists, a reset link has been sent');
         },
-        error: () => {
-          alert('Email does not exist');
-          this.router.navigate(['/register']);
-        }
-      });
-      
-    }else{
-      alert('Form Invalid');
-    }    
+        error: () => {}
+      });      
+    }  
   }
 }

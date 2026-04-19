@@ -21,9 +21,17 @@ export class App implements OnInit{
   }
 
   logout() {
-    if(confirm("Are you sure you want to log out?"))
+    if(confirm("Do you want to log out?"))
     {
       this.authService.logout();
     };    
+  }
+
+  deleteAccount()
+  {
+    if(confirm("Are you sure you want to DELETE Your account?"))
+    {
+      this.authService.deleteAccount();
+    }; 
   }
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/authService/auth.service';
 import { UserDto } from '../../core/models/userDto.model';
 import { LoaderService } from '../../core/services/loaderService/loader-service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -39,11 +40,6 @@ export class Register implements OnInit{
     );
   }
 
-  toggle()
-  {
-    this.router.navigate(['/login']);
-  }
-
   register()
   {
     if(!this.form.invalid)
@@ -58,13 +54,11 @@ export class Register implements OnInit{
           alert('Successfully registered');
           this.router.navigate(['/login']);
         },
-        error: () => {
-          alert('Account already exists');
+        error: (error: HttpErrorResponse) => {
+          if(error.status === 400 )
+            alert('Account already exists');
         }
-      });
-      
-    }else{
-      alert('Form Invalid');
-    }    
+      });      
+    }  
   }
 }
