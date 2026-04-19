@@ -20,7 +20,7 @@ export class TaskForm implements OnInit {
   task: Task = new Task();
   taskModel: TaskModel = new TaskModel();
   minDate = new Date().toString().split("T")[0];
-  taskId: string | null = '';
+  taskId: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +38,7 @@ export class TaskForm implements OnInit {
   ngOnInit() { 
     this.loader.show();
     this.route.paramMap.subscribe(params => {
-      this.taskId = params.get('taskId');
+      this.taskId = params.get('taskId')!;
     });
 
     this.form = this.fb.group({
@@ -62,14 +62,13 @@ export class TaskForm implements OnInit {
 
   loadTask(taskId: string) {
     this.taskService.getTaskById(+taskId).subscribe((response) =>{
-      this.task = response;
-      if (this.task) {
+      if (response) {
         this.form.patchValue({
-          title: this.task.title,
-          description: this.task.description,
-          status: this.task.status,
-          priority: this.task.priority,
-          dueDate: this.task.dueDate?.toString().split("T")[0]
+          title: response.title,
+          description: response.description,
+          status: response.status,
+          priority: response.priority,
+          dueDate: response.dueDate?.toString().split("T")[0]
         });
       }
     });    
@@ -109,14 +108,13 @@ export class TaskForm implements OnInit {
         break;
       }
 
-      this.task.createdAt = this.isEditMode? this.task.createdAt : new Date();
       this.task.description = this.form.get("description")?.value;     
       this.task.dueDate = this.form.get("dueDate")?.value;
       this.task.title = this.form.get("title")?.value;
       
       if(this.isEditMode)
       {
-        this.taskService.updateTask(this.task.id ,this.task).subscribe(() =>{
+        this.taskService.updateTask(+this.taskId ,this.task).subscribe(() =>{
           alert('Task updated');
           this.router.navigate(['/home']);
         });

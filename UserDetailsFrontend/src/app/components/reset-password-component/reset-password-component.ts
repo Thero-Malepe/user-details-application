@@ -32,9 +32,23 @@ export class ResetPasswordComponent implements OnInit{
     this.email = this.route.snapshot.queryParamMap.get('email')!;
     this.token = this.route.snapshot.queryParamMap.get('token')!;
 
+    if(this.email == null || this.token == null)
+    {
+      this.router.navigate(['/forbidden']);
+    }
+    else{
+      this.authService.validateToken(this.token).subscribe({
+        next: () => {           
+            
+          },
+        error: () => {
+          this.router.navigate(['/forbidden']);
+        }
+      });
+    }
+
     this.form = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]],
-      email: ['', [Validators.required, Validators.email]]
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15)]]
     }); 
 
     setTimeout(() => {

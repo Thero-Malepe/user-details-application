@@ -8,6 +8,7 @@ import { ResetPasswordComponent } from './components/reset-password-component/re
 import { ForgotPassword } from './components/forgot-password/forgot-password';
 import { TaskList } from './components/task-list/task-list';
 import { TaskForm } from './components/task-form/task-form';
+import { DeniedAccess } from './components/denied-access/denied-access';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
     path: 'forgot-password',
     component: ForgotPassword,
     title: 'Forgot Password'
+  },
+  {
+    path: 'forbidden',
+    component: DeniedAccess,
+    title: 'Access Denied'
   },
   // {
   //   path: 'home',

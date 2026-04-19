@@ -15,6 +15,7 @@ import { ForgotPassword } from './components/forgot-password/forgot-password';
 import { TaskForm } from './components/task-form/task-form';
 import { TaskList } from './components/task-list/task-list';
 import { Loader } from './components/loader/loader';
+import { DeniedAccess } from './components/denied-access/denied-access';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { Loader } from './components/loader/loader';
     ForgotPassword,
     TaskForm,
     TaskList,
-    Loader
+    Loader,
+    DeniedAccess
   ],
   imports: [
     AppRoutingModule,

@@ -52,6 +52,7 @@ export class ForgotPassword implements OnInit {
         },
         error: () => {
           alert('Email does not exist');
+          this.router.navigate(['/register']);
         }
       });
       

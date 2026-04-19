@@ -7,5 +7,4 @@ export class TaskModel {
     status: Status = Status.ToDo;
     priority: Priority = Priority.Low;
     dueDate?: Date = undefined;
-    createdAt: Date = new Date();
 }

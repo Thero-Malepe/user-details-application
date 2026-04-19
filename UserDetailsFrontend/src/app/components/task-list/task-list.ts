@@ -25,7 +25,7 @@ export class TaskList implements OnInit {
 
   ngOnInit() {   
     this.loader.show();
-    this.taskService.getTasks().subscribe((response) => {
+    this.taskService.getTasksByUserId().subscribe((response) => {
       this.tasks = response;
       this.filteredTasks = [...this.tasks];
       this.applyFilters();
@@ -92,8 +92,6 @@ export class TaskList implements OnInit {
       day: 'numeric'
     });
   }
-
-
   deleteTask(taskId: Number): void {
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskService.deleteTask(taskId).subscribe(() =>{
@@ -103,7 +101,6 @@ export class TaskList implements OnInit {
       });
     }
   }
-
 
   trackByTaskId(index: number, task: Task): Number {
     return task.id;

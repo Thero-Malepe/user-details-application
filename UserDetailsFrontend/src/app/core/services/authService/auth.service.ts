@@ -50,6 +50,12 @@ export class AuthService {
       `${this.apiUrl}/Auth/refresh-token`, dto
     );
   }
+
+  validateToken(token: string): Observable<any>  {
+    return this.http.get<TokenResponseDto>(
+      `${this.apiUrl}/Auth/validate-token?token=${encodeURIComponent(token)}`
+    );
+  }
   
   logout()
   {    
