@@ -17,6 +17,19 @@
     margin: 0 auto;
     padding: 2rem;
   }
+
+  nav {
+    display: flex;
+    justify-content: space-between; /* pushes left + right apart */
+    align-items: center;            /* vertically centers everything */
+    padding: 0 1rem;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
   
   .nav-link:hover {
     background: rgba(255, 255, 255, 0.1);
@@ -40,5 +53,15 @@
   .nav-link-primary.active {
     background: #2980b9;
     border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .init-app {
+    height: 45px;
+    width: 50px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
   }
   

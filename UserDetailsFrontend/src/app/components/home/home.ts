@@ -58,7 +58,7 @@ export class Home implements OnInit {
 
   loadUserDetails()
   {
-    this.User.getDetailsByEmail().subscribe({
+    this.User.getDetails().subscribe({
       next: (response) => { 
         this.form.patchValue({
           firstName: response.firstName,

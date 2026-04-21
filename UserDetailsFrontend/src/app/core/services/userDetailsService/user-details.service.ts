@@ -14,7 +14,7 @@ export class UserDetailsService {
 
   constructor(private http: HttpClient) { }
 
-  getDetailsByEmail(): Observable<UserDetails> {
+  getDetails(): Observable<UserDetails> {
     return this.http.get<UserDetails>(
       `${this.apiUrl}/UserDetails/user-details`
     );

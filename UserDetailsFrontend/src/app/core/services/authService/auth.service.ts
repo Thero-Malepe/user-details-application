@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   deleteAccount(): Observable<any>  {
-    return this.http.get<TokenResponseDto>(
+    return this.http.delete(
       `${this.apiUrl}/Auth/delete-user`
     );
   }
