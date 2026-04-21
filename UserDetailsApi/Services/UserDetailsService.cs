@@ -2,27 +2,37 @@
 using UserDetailsApi.Data;
 using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
+using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Services
 {
-    public class UserDetailsService(UserDetailsDbContext context) : IUserDetailsService
+    public class UserDetailsService(UserDetailsDbContext context, ILogger<TaskManagereService> logger) : IUserDetailsService
     {
-        public async Task<UserDetailsDto?> GetUserDetails(string userEmail)
+        public async Task<UserDetailsDto?> GetUserDetails(string userId)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
+            logger.LogInformation("Retrieving details for user :{id}", userId);
+            if (Guid.TryParse(userId, out Guid id))
+            {
+                var user = await context.Users.FindAsync(id);
+                if (user is null)
+                {
+                    logger.LogError("User with Id: {id} not found", id);
+                    return null;
+                }
 
-            if (user is null)
-            {
-                return null;
+                var userDetailsDto = new UserDetailsDto
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                };
+
+                logger.LogInformation("Retrieved details for user :{id}", id);
+                return userDetailsDto;
             }
-            var userDetailsDto = new UserDetailsDto
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-            };
-            
-            return userDetailsDto;
+
+            logger.LogError("Invalid Id: {id}", userId);
+            return null;
         }
     }
 }

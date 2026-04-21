@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
+using UserDetailsApi.Models.RequestModels.TaskRequestModels;
 
 namespace UserDetailsApi.Validators.TaskManagerValidators
 {
-    public class DeleteTaskValidator : AbstractValidator<int>
+    public class DeleteTaskValidator : AbstractValidator<DeleteTaskRequestModel>
     {
         public DeleteTaskValidator()
         {
-            RuleFor(obj => obj).NotEmpty().GreaterThanOrEqualTo(1);
+            RuleFor(obj => obj.Id).NotEmpty().GreaterThan(0);
         }
     }
 }

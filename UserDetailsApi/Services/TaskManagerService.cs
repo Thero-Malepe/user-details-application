@@ -45,7 +45,7 @@ namespace UserDetailsApi.Services
             if (tasks is not null)
             {
                 logger.LogInformation("Tasks retrieved");
-                List<TaskResponseDto> taskListDto = new();
+                List<TaskResponseDto> taskListDto = [];
 
                 foreach ( var item in tasks)
                 {
@@ -96,6 +96,12 @@ namespace UserDetailsApi.Services
 
         public async Task<TaskResponseDto?> UpdateTask(int id, TaskDto taskModel)
         {
+            if (id <= 0)
+            {
+                logger.LogError("Invalid Id");
+                return null;
+            }
+                
             logger.LogInformation("Updating task with ID: {taskModel.Id}", id);
 
             var existingTask = await context.Tasks.FindAsync(id);

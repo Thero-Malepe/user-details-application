@@ -74,7 +74,7 @@ namespace UserDetailsApi.Services
             };
         }
 
-        public async Task<TokenResponseDto?> RefreshToken(RefreshTokenDto request)
+        public async Task<TokenResponseDto?> RefreshToken(TokenResponseDto request)
         {
             logger.LogInformation("Refreshing user token");
 
@@ -193,6 +193,7 @@ namespace UserDetailsApi.Services
 
         public async Task<bool> ResetPassword(ResetDto details)
         {
+            logger.LogInformation("Resetting password for user with email: {email}", details.Email);
             var resetToken = await ValidateResetToken(details.Token);
             if (resetToken is null)
             {
@@ -206,7 +207,7 @@ namespace UserDetailsApi.Services
             resetToken.Used = true;
             await context.SaveChangesAsync();
 
-            logger.LogInformation("User email: {email} password changed successfully", details.Email);
+            logger.LogInformation("User with email: {email} password changed successfully", details.Email);
             return true;
         }
 
@@ -221,11 +222,13 @@ namespace UserDetailsApi.Services
                 return null;
             }
 
+            logger.LogInformation("Token validated successfully");
             return reset;
         }
 
         public async Task<bool?> DeleteUser(string userId)
         {
+            logger.LogInformation("Deleting user with ID: {id}", userId);
             if (Guid.TryParse(userId, out Guid id))
             {
                 var userAffected = await context.Users.Where(x => x.Id == id).ExecuteDeleteAsync();
@@ -237,10 +240,11 @@ namespace UserDetailsApi.Services
                     return true;
                 }
 
-                logger.LogInformation("User with ID: {id} not found", id);
+                logger.LogError("User with ID: {id} not found", id);
                 return false;
             }
 
+            logger.LogError("Invalid user ID: {id}", userId);
             return null;
         }
     }

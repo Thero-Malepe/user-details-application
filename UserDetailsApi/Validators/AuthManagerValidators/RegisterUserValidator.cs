@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using UserDetailsApi.DTOs.AuthDtos;
-using UserDetailsApi.DTOs.TaskManagerDtos;
+using UserDetailsApi.Models.RequestModels.UserRequestModels;
 
 namespace UserDetailsApi.Validators.AuthManagerValidators
 {
-    public class RegisterUserValidator : AbstractValidator<UserDto>
+    public class RegisterUserValidator : AbstractValidator<RegisterUserRequestModel>
     {
         public RegisterUserValidator()
         {

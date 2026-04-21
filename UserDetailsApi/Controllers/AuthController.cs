@@ -1,29 +1,33 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UserDetailsApi.DTOs.AuthDtos;
 using UserDetailsApi.Interfaces;
+using UserDetailsApi.Models.RequestModels.UserRequestModels;
 
 namespace UserDetailsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IAuthManagerService authManager) : ControllerBase
+    public class AuthController(IAuthManagerService authManager, IMapper mapper) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register ([FromBody] UserDto request)
+        public async Task<IActionResult> Register ([FromBody] RegisterUserRequestModel request)
         {
-            var user = await authManager.Register(request);
+            var dto = mapper.Map<UserDto>(request);
+            var user = await authManager.Register(dto);
             if (user is null)
                 return BadRequest("User already exists");
 
-            return Ok(user);
+            return Ok();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto request)
+        public async Task<IActionResult> Login([FromBody] LoginUserRequestModel request)
         {
-            var result = await authManager.Login(request);
+            var dto = mapper.Map<LoginDto>(request);
+            var result = await authManager.Login(dto);
             if (result is null)
             {
                 return BadRequest("Email or password is incorrect");
@@ -34,9 +38,10 @@ namespace UserDetailsApi.Controllers
 
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto request)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestModel request)
         {
-            var result = await authManager.RefreshToken(request);
+            var dto = mapper.Map<TokenResponseDto>(request);
+            var result = await authManager.RefreshToken(dto);
             if (result is null || result.AccessToken is null || result.RefreshToken is null)
             {
                 return Unauthorized("Invalid refresh token");
@@ -58,9 +63,10 @@ namespace UserDetailsApi.Controllers
 
         [HttpPost()]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetDto details)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestModel request)
         {
-            var result = await authManager.ResetPassword(details);
+            var dto = mapper.Map<ResetDto>(request);
+            var result = await authManager.ResetPassword(dto);
             if (!result)
                 return NotFound();
 

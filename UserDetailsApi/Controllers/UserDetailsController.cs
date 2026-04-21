@@ -14,12 +14,8 @@ namespace UserDetailsApi.Controllers
         [HttpGet("user-details")]
         public async Task<IActionResult> GetUserDetails()
         {
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            if(email is null)
-            {
-                return NotFound();
-            }
-            var details = await detailsService.GetUserDetails(email);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var details = await detailsService.GetUserDetails(userId);
 
             return details is null ? NotFound() : Ok(details);
         }

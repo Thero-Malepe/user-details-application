@@ -123,7 +123,7 @@ namespace UserDetailsApi.Tests
         public async Task RefreshToken_ShouldReturnOk_WhenTokensAreValid()
         {
             // Arrange
-            var request = new RefreshTokenDto { AccessToken = "old", RefreshToken = "refresh" };
+            var request = new TokenResponseDto { AccessToken = "old", RefreshToken = "refresh" };
             var newTokens = new TokenResponseDto { AccessToken = "new", RefreshToken = "newRefresh" };
 
             _authMock
@@ -142,7 +142,7 @@ namespace UserDetailsApi.Tests
         public async Task RefreshToken_ShouldReturnUnauthorized_WhenRefreshTokenInvalid()
         {
             // Arrange
-            var request = new RefreshTokenDto { AccessToken = "old", RefreshToken = "expired" };
+            var request = new TokenResponseDto { AccessToken = "old", RefreshToken = "expired" };
 
             _authMock
                 .Setup(x => x.RefreshToken(request))

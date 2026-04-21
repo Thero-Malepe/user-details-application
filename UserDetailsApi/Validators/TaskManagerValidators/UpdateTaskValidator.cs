@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
-using UserDetailsApi.Models;
+using UserDetailsApi.Models.RequestModels.TaskRequestModels;
 
 namespace UserDetailsApi.Validators.TaskManagerValidators
 {
-    public class UpdateTaskValidator : AbstractValidator<TaskModel>
+    public class UpdateTaskValidator : AbstractValidator<UpdateTaskRequestModel>
     {
         public UpdateTaskValidator()
         {
-            RuleFor(obj => obj.Id).NotEmpty().GreaterThanOrEqualTo(1);
             RuleFor(obj => obj.Description).NotEmpty();
             RuleFor(obj => obj.Title).NotEmpty();
             RuleFor(obj => obj.DueDate).NotEmpty();

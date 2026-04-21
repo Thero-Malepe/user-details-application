@@ -1,16 +1,15 @@
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
 using UserDetailsApi.Data;
-using UserDetailsApi.Helpers;
 using UserDetailsApi.Interfaces;
 using UserDetailsApi.Middleware;
 using UserDetailsApi.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace UserDetailsApi
 {
@@ -50,13 +49,15 @@ namespace UserDetailsApi
             builder.Services.AddScoped<IAuthManagerService, AuthManagerService>();
             builder.Services.AddScoped<IUserDetailsService, UserDetailsService>();
             builder.Services.AddScoped<ITaskManagerService, TaskManagereService>();
-            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+            builder.Services.AddFluentValidationAutoValidation();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen();
 
+            //builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "UserDetails API", Version = "v1" });

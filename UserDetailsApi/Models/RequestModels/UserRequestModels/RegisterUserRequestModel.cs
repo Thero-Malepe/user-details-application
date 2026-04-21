@@ -1,6 +1,6 @@
-﻿namespace UserDetailsApi.DTOs.AuthDtos
+﻿namespace UserDetailsApi.Models.RequestModels.UserRequestModels
 {
-    public class UserDto
+    public class RegisterUserRequestModel
     {
         public string Email { get; set; } = string.Empty;
 

@@ -1,5 +1,4 @@
 ﻿using UserDetailsApi.DTOs.TaskManagerDtos;
-using UserDetailsApi.Models;
 
 namespace UserDetailsApi.Interfaces
 {

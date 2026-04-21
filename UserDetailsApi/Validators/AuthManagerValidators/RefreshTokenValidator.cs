@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using UserDetailsApi.DTOs.AuthDtos;
+using UserDetailsApi.Models.RequestModels.UserRequestModels;
 
 namespace UserDetailsApi.Validators.AuthManagerValidators
 {
-    public class RefreshTokenValidator : AbstractValidator<RefreshTokenDto>
+    public class RefreshTokenValidator : AbstractValidator<RefreshTokenRequestModel>
     {
         public RefreshTokenValidator()
         {

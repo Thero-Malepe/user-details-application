@@ -1,8 +1,8 @@
 ﻿using UserDetailsApi.Enums;
 
-namespace UserDetailsApi.DTOs.TaskManagerDtos
+namespace UserDetailsApi.Models.RequestModels.TaskRequestModels
 {
-    public class TaskDto
+    public class UpdateTaskRequestModel
     {
         public string Title { get; set; } = string.Empty;
 
@@ -13,6 +13,5 @@ namespace UserDetailsApi.DTOs.TaskManagerDtos
         public Priority Priority { get; set; }
 
         public DateTime? DueDate { get; set; }
-
     }
 }

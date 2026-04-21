@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using UserDetailsApi.DTOs.TaskManagerDtos;
+using UserDetailsApi.Models.RequestModels.TaskRequestModels;
 
 namespace UserDetailsApi.Validators.TaskManagerValidators
 {
-    public class CreateTaskValidator : AbstractValidator<TaskDto>
+    public class CreateTaskValidator : AbstractValidator<CreateTaskRequestModel>
     {
         public CreateTaskValidator()
         {

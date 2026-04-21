@@ -1,27 +1,30 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UserDetailsApi.DTOs.TaskManagerDtos;
 using UserDetailsApi.Interfaces;
+using UserDetailsApi.Models.RequestModels.TaskRequestModels;
 
 namespace UserDetailsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class TaskController(ITaskManagerService taskInterface) : ControllerBase
+    public class TaskController(ITaskManagerService taskInterface, IMapper mapper) : ControllerBase
     {
         [HttpPost("add-task")]
-        public async Task<IActionResult> CreateTask(TaskDto taskModel)
+        public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequestModel request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
+            var taskModel = mapper.Map<TaskDto>(request);
             var result = await taskInterface.CreateTask(userId, taskModel);
             if (result is not null)
             {
                 return CreatedAtAction(nameof(CreateTask), new { id = result.Id }, result);
             }
 
-            return BadRequest(result);
+            return BadRequest();
         }
 
         [HttpGet("get-tasks")]
@@ -36,7 +39,6 @@ namespace UserDetailsApi.Controllers
         public async Task<IActionResult> GetTaskById(int id)
         {
             var task = await taskInterface.GetTaskById(id);
-
             if (task is null)
             {
                 return NotFound(new ProblemDetails
@@ -51,13 +53,13 @@ namespace UserDetailsApi.Controllers
             return Ok(task);
         }
 
-        [HttpGet("get-task-by-user")]
+        [HttpGet("get-tasks-by-user")]
         public async Task<IActionResult> GetTasksByUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!.ToString();
-            var task = await taskInterface.GetTasksByUserId(userId);
+            var tasks = await taskInterface.GetTasksByUserId(userId);
 
-            if (task is null)
+            if (tasks is null)
             {
                 return NotFound(new ProblemDetails
                 {
@@ -68,13 +70,14 @@ namespace UserDetailsApi.Controllers
                 });
             }
 
-            return Ok(task);
+            return Ok(tasks);
         }
 
         [HttpPut("update-task/{id}")]
-        public async Task<IActionResult> UpdateTask(int id, [FromBody] TaskDto taskModel)
+        public async Task<IActionResult> UpdateTask(int id, [FromBody] UpdateTaskRequestModel request)
         {
-            var result = await taskInterface.UpdateTask(id, taskModel);
+            var dto = mapper.Map<TaskDto>(request);
+            var result = await taskInterface.UpdateTask(id, dto);
 
             if (result is not null)
                 return Ok(result);
@@ -91,7 +94,8 @@ namespace UserDetailsApi.Controllers
         [HttpDelete("delete-task/{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var result = await taskInterface.DeleteTask(id);
+            var request = new DeleteTaskRequestModel { Id = id };
+            var result = await taskInterface.DeleteTask(request.Id);
             if (!result)
             {
                 return NotFound(new ProblemDetails
