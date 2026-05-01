@@ -17,6 +17,9 @@ export class TaskList implements OnInit {
   tasks: Task[] = [];
   searchQuery: string = '';
   sortOrder: 'dueDate:asc' | 'dueDate:desc' = 'dueDate:asc';
+  currentPage = 1;
+  pages = 1;
+  itemsPerPage = 10;
   
   constructor(
     private taskService: TaskService,
@@ -41,6 +44,11 @@ export class TaskList implements OnInit {
   navigate(){
     this.router.navigate(['/tasks/new']);
   }
+  
+  loadPage(page: number)
+  {
+    this.currentPage = page;
+  }
 
   applyFilters(): void {
     let result = [...this.tasks];
@@ -64,7 +72,6 @@ export class TaskList implements OnInit {
 
     this.filteredTasks = result;
   }
-
  
   onSearchChange(event: Event): void {
     const target = event.target as HTMLInputElement;

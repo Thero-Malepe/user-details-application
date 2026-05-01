@@ -1,0 +1,32 @@
+<div>
+    <ul class="pagination justify-content-center clickable">
+        <!-- Previous -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link"
+                aria-disabled="true"
+                (click)="currentPage === 1 ? null : changePage(currentPage - 1)">
+                Previous
+            </a>
+        </li>
+
+        <!-- Page numbers -->
+         @for (page of pages; track page) {
+            <li class="page-item" [class.disabled]="currentPage === page">
+                <a class="page-link"
+                    aria-disabled="true"
+                    (click)="changePage(page)">
+                    {{ page }}
+                </a>
+            </li>
+        }
+
+        <!-- Next -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link"
+                aria-disabled="true"
+                (click)="currentPage === totalPages ? null : changePage(currentPage + 1)">
+                Next
+            </a>
+        </li>
+    </ul>
+</div>

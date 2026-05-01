@@ -32,8 +32,8 @@
   
   .btn-sm i {
     font-size: 1rem;
-  }
-  
+  }  
+
   /* Overdue border indicator */
   .border-start.border-danger {
     border-width: 4px !important;

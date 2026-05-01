@@ -16,6 +16,7 @@ import { TaskForm } from './components/task-form/task-form';
 import { TaskList } from './components/task-list/task-list';
 import { Loader } from './components/loader/loader';
 import { DeniedAccess } from './components/denied-access/denied-access';
+import { Pagination } from './components/pagination/pagination';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { DeniedAccess } from './components/denied-access/denied-access';
     TaskForm,
     TaskList,
     Loader,
-    DeniedAccess
+    DeniedAccess,
+    Pagination
   ],
   imports: [
     AppRoutingModule,

@@ -26,7 +26,7 @@
   <br>
   <div class="list-group">
     <div 
-      *ngFor="let task of filteredTasks; trackBy: trackByTaskId"
+      *ngFor="let task of filteredTasks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); trackBy: trackByTaskId"
       class="list-group-item list-group-item-action mb-3"
     >
       <div class="d-flex w-100 justify-content-between align-items-start">
@@ -99,6 +99,14 @@
       <div class="card-footer text-right">
           <button type="submit" class="btn btn-primary" (click)="navigate()">Create Task</button>
       </div>
-    } 
-  </div>
+      <br>
+
+      <app-pagination 
+        [itemsPerPage]="itemsPerPage" 
+        [numberOfItems]="tasks.length" 
+        [currentPage]="currentPage"
+        (pageChange)="loadPage($event)"
+      ></app-pagination>
+    }
+  </div> 
 </div>
