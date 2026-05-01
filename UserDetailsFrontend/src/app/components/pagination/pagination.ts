@@ -1,3 +1,4 @@
+import { NumberSymbol } from '@angular/common';
 import { Component, EventEmitter, Input, input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
@@ -24,10 +25,13 @@ export class Pagination implements OnChanges{
     }
   }
 
-  changePage(page: number)
+  changePage(page: any)
   {
-    this.currentPage = page;
-    this.pageChange.emit(this.currentPage);
+    if(typeof page === "number")
+    {
+      this.currentPage = page;
+      this.pageChange.emit(this.currentPage);
+    }    
   }
 
   generatePages(): (number | string)[] 
