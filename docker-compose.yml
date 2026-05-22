@@ -22,8 +22,8 @@ services:
       ASPNETCORE_URLS: http://+:5066
       ConnectionStrings__UserDetailsDb: ${DB_CONNECTION}
       JwtSettings__Token: ${JWT_TOKEN}
-      SMTP__Username: ${SMTP_USERNAME}
-      SMTP__Password: ${SMTP_PASSWORD}
+      SMTP__PORT: ${SMTP_PORT}
+      SMTP__HOST: ${SMTP_HOST}
 
     depends_on:
       - postgres

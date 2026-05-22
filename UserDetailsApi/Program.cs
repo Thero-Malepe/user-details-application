@@ -46,9 +46,13 @@ namespace UserDetailsApi
                 };
             });
 
+            builder.Services.AddMemoryCache();
+            builder.Services.AddDistributedMemoryCache();
+
             builder.Services.AddScoped<IAuthManagerService, AuthManagerService>();
             builder.Services.AddScoped<IUserDetailsService, UserDetailsService>();
             builder.Services.AddScoped<ITaskManagerService, TaskManagereService>();
+            builder.Services.AddScoped<ICacheService, CacheService>();
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);

@@ -35,8 +35,7 @@ export class TaskForm implements OnInit {
     }
   }
 
-  ngOnInit() { 
-    this.loader.show();
+  ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.taskId = params.get('taskId')!;
     });
@@ -51,13 +50,7 @@ export class TaskForm implements OnInit {
 
     if (this.isEditMode) {
       this.loadTask(this.taskId!);
-    }    
-
-    setTimeout(() => {
-        this.loader.hide();
-      }, 
-      4000
-    );
+    }
   }
 
   loadTask(taskId: string) {
